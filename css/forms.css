@@ -1,0 +1,315 @@
+/* PetPal - Formlar, Bildirimler ve Durum Rozetleri (Member 2) */
+
+:root {
+    --color-primary: #2e7d6b;
+    --color-primary-dark: #236153;
+    --color-bg: #f6f8f7;
+    --color-surface: #ffffff;
+    --color-text: #1f2933;
+    --color-muted: #52606d;
+    --color-border: #d9e2ec;
+    --color-error: #c62828;
+    --color-error-bg: #fdecea;
+    --color-success: #1b5e20;
+    --color-success-bg: #e8f5e9;
+    --color-warning: #8a5300;
+    --color-warning-bg: #fff4e0;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    line-height: 1.5;
+}
+
+/* Gecici ust bilgi ve alt bilgi iskeleti */
+.site-header {
+    background-color: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+    padding: 0.9rem 1.5rem;
+}
+
+.site-nav {
+    max-width: 1080px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.site-brand {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    text-decoration: none;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-links a {
+    color: var(--color-text);
+    text-decoration: none;
+    font-weight: 500;
+    padding: 0.35rem 0.65rem;
+    border-radius: 6px;
+}
+
+.nav-links a:hover,
+.nav-links a:focus {
+    background-color: var(--color-bg);
+    color: var(--color-primary);
+}
+
+.site-main {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 2.5rem 1.25rem;
+}
+
+.site-footer {
+    background-color: var(--color-surface);
+    border-top: 1px solid var(--color-border);
+    text-align: center;
+    padding: 1rem 1.5rem;
+    color: var(--color-muted);
+    font-size: 0.9rem;
+}
+
+/* Form karti ve Flexbox duzeni */
+.form-card {
+    width: 100%;
+    max-width: 520px;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 4px 16px rgba(31, 41, 51, 0.06);
+}
+
+.form-card h1 {
+    margin: 0 0 0.4rem;
+    font-size: 1.6rem;
+    color: var(--color-text);
+}
+
+.form-subtitle {
+    margin: 0 0 1.5rem;
+    color: var(--color-muted);
+    font-size: 0.95rem;
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+}
+
+.form-row {
+    display: flex;
+    gap: 1rem;
+}
+
+.form-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.form-group label {
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--color-text);
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 0.68rem 0.85rem;
+    font-size: 0.98rem;
+    font-family: inherit;
+    color: var(--color-text);
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-group textarea {
+    min-height: 110px;
+    resize: vertical;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(46, 125, 107, 0.18);
+}
+
+.btn-primary {
+    width: 100%;
+    padding: 0.78rem 1.2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #ffffff;
+    background-color: var(--color-primary);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+    background-color: var(--color-primary-dark);
+}
+
+.form-footer-link {
+    margin: 1.25rem 0 0;
+    text-align: center;
+    font-size: 0.93rem;
+    color: var(--color-muted);
+}
+
+.form-footer-link a {
+    color: var(--color-primary);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.form-footer-link a:hover,
+.form-footer-link a:focus {
+    text-decoration: underline;
+}
+
+/* Hata ve bildirim kutulari */
+.error-text {
+    color: var(--color-error);
+    font-size: 0.84rem;
+    font-weight: 500;
+}
+
+.alert-error,
+.alert-success {
+    padding: 0.8rem 1rem;
+    border-radius: 8px;
+    margin-bottom: 1.15rem;
+    font-size: 0.93rem;
+    font-weight: 500;
+    border: 1px solid transparent;
+}
+
+.alert-error {
+    background-color: var(--color-error-bg);
+    color: var(--color-error);
+    border-color: #f5c6cb;
+}
+
+.alert-success {
+    background-color: var(--color-success-bg);
+    color: var(--color-success);
+    border-color: #b7dfb9;
+}
+
+/* Basvuru durum rozetleri */
+.badge-pending,
+.badge-approved,
+.badge-rejected {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.25rem 0.65rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+.badge-pending {
+    background-color: var(--color-warning-bg);
+    color: var(--color-warning);
+}
+
+.badge-approved {
+    background-color: var(--color-success-bg);
+    color: var(--color-success);
+}
+
+.badge-rejected {
+    background-color: var(--color-error-bg);
+    color: var(--color-error);
+}
+
+/* Tablet ve kucuk ekranlar (768px ve alti) */
+@media (max-width: 768px) {
+    .site-nav {
+        flex-wrap: wrap;
+    }
+
+    .site-main {
+        padding: 1.75rem 1rem;
+    }
+
+    .form-card {
+        padding: 1.5rem;
+    }
+
+    .form-row {
+        flex-direction: column;
+        gap: 1.1rem;
+    }
+}
+
+/* Telefon ekranlari (375px ve alti) */
+@media (max-width: 375px) {
+    .site-header {
+        padding: 0.75rem 0.9rem;
+    }
+
+    .site-nav {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+
+    .nav-links {
+        width: 100%;
+        justify-content: flex-start;
+        gap: 0.5rem;
+    }
+
+    .site-main {
+        padding: 1rem 0.75rem;
+    }
+
+    .form-card {
+        padding: 1.15rem;
+        border-radius: 8px;
+    }
+
+    .form-card h1 {
+        font-size: 1.35rem;
+    }
+}
