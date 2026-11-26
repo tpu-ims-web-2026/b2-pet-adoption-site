@@ -2,7 +2,7 @@
 require_once 'config.php';
 require_once 'includes/auth.php';
 
-$pageTitle = 'Giris Yap - PetPal';
+$pageTitle = 'Log In - PetPal';
 $flash = get_flash();
 $hasSharedHeader = file_exists('includes/header.php');
 
@@ -11,7 +11,7 @@ if ($hasSharedHeader) {
 } else {
 ?>
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,11 +20,11 @@ if ($hasSharedHeader) {
 </head>
 <body>
     <header class="site-header">
-        <nav class="site-nav" aria-label="Ana Menu">
+        <nav class="site-nav" aria-label="Main Navigation">
             <a class="site-brand" href="index.php">PetPal</a>
             <ul class="nav-links">
-                <li><a href="login.php">Giris Yap</a></li>
-                <li><a href="register.php">Kayit Ol</a></li>
+                <li><a href="login.php">Log In</a></li>
+                <li><a href="register.php">Register</a></li>
             </ul>
         </nav>
     </header>
@@ -33,8 +33,8 @@ if ($hasSharedHeader) {
 }
 ?>
         <section class="form-card" aria-labelledby="login-heading">
-            <h1 id="login-heading">Giris Yap</h1>
-            <p class="form-subtitle">Hesabiniza erismek icin e-posta adresinizi ve sifrenizi girin.</p>
+            <h1 id="login-heading">Log In</h1>
+            <p class="form-subtitle">Enter your email address and password to access your account.</p>
 
             <?php if ($flash !== null) { ?>
                 <div class="<?php echo $flash['type'] === 'success' ? 'alert-success' : 'alert-error'; ?>" role="alert">
@@ -44,7 +44,7 @@ if ($hasSharedHeader) {
 
             <form class="auth-form" action="login.php" method="POST">
                 <div class="form-group">
-                    <label for="email">E-posta Adresi</label>
+                    <label for="email">Email Address</label>
                     <input
                         type="email"
                         id="email"
@@ -56,7 +56,7 @@ if ($hasSharedHeader) {
                 </div>
 
                 <div class="form-group">
-                    <label for="password">Sifre</label>
+                    <label for="password">Password</label>
                     <input
                         type="password"
                         id="password"
@@ -65,11 +65,11 @@ if ($hasSharedHeader) {
                     >
                 </div>
 
-                <button type="submit" class="btn-primary">Giris Yap</button>
+                <button type="submit" class="btn-primary">Log In</button>
             </form>
 
             <p class="form-footer-link">
-                Henuz hesabiniz yok mu? <a href="register.php">Kayit Ol</a>
+                Don't have an account yet? <a href="register.php">Register</a>
             </p>
         </section>
 <?php
@@ -79,7 +79,7 @@ if (file_exists('includes/footer.php')) {
 ?>
     </main>
     <footer class="site-footer">
-        <p>&copy; <?php echo e(date('Y')); ?> PetPal Evcil Hayvan Sahiplendirme Platformu</p>
+        <p>&copy; <?php echo e(date('Y')); ?> PetPal Pet Adoption Platform</p>
     </footer>
 </body>
 </html>

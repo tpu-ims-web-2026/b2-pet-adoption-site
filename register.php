@@ -2,7 +2,7 @@
 require_once 'config.php';
 require_once 'includes/auth.php';
 
-$pageTitle = 'Kayit Ol - PetPal';
+$pageTitle = 'Register - PetPal';
 $flash = get_flash();
 $hasSharedHeader = file_exists('includes/header.php');
 
@@ -11,7 +11,7 @@ if ($hasSharedHeader) {
 } else {
 ?>
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,11 +20,11 @@ if ($hasSharedHeader) {
 </head>
 <body>
     <header class="site-header">
-        <nav class="site-nav" aria-label="Ana Menu">
+        <nav class="site-nav" aria-label="Main Navigation">
             <a class="site-brand" href="index.php">PetPal</a>
             <ul class="nav-links">
-                <li><a href="login.php">Giris Yap</a></li>
-                <li><a href="register.php">Kayit Ol</a></li>
+                <li><a href="login.php">Log In</a></li>
+                <li><a href="register.php">Register</a></li>
             </ul>
         </nav>
     </header>
@@ -33,8 +33,8 @@ if ($hasSharedHeader) {
 }
 ?>
         <section class="form-card" aria-labelledby="register-heading">
-            <h1 id="register-heading">Hesap Olustur</h1>
-            <p class="form-subtitle">PetPal topluluguna katilin ve sahiplendirme basvurularinizi takip edin.</p>
+            <h1 id="register-heading">Create Account</h1>
+            <p class="form-subtitle">Join the PetPal community and track your adoption applications.</p>
 
             <?php if ($flash !== null) { ?>
                 <div class="<?php echo $flash['type'] === 'success' ? 'alert-success' : 'alert-error'; ?>" role="alert">
@@ -44,7 +44,7 @@ if ($hasSharedHeader) {
 
             <form class="auth-form" action="register.php" method="POST">
                 <div class="form-group">
-                    <label for="full_name">Ad Soyad</label>
+                    <label for="full_name">Full Name</label>
                     <input
                         type="text"
                         id="full_name"
@@ -56,7 +56,7 @@ if ($hasSharedHeader) {
                 </div>
 
                 <div class="form-group">
-                    <label for="email">E-posta Adresi</label>
+                    <label for="email">Email Address</label>
                     <input
                         type="email"
                         id="email"
@@ -69,7 +69,7 @@ if ($hasSharedHeader) {
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="phone">Telefon (Istege Bagli)</label>
+                        <label for="phone">Phone (Optional)</label>
                         <input
                             type="tel"
                             id="phone"
@@ -80,7 +80,7 @@ if ($hasSharedHeader) {
                     </div>
 
                     <div class="form-group">
-                        <label for="city">Sehir (Istege Bagli)</label>
+                        <label for="city">City (Optional)</label>
                         <input
                             type="text"
                             id="city"
@@ -92,7 +92,7 @@ if ($hasSharedHeader) {
                 </div>
 
                 <div class="form-group">
-                    <label for="password">Sifre</label>
+                    <label for="password">Password</label>
                     <input
                         type="password"
                         id="password"
@@ -103,7 +103,7 @@ if ($hasSharedHeader) {
                 </div>
 
                 <div class="form-group">
-                    <label for="password_confirm">Sifre Tekrar</label>
+                    <label for="password_confirm">Confirm Password</label>
                     <input
                         type="password"
                         id="password_confirm"
@@ -113,11 +113,11 @@ if ($hasSharedHeader) {
                     >
                 </div>
 
-                <button type="submit" class="btn-primary">Kayit Ol</button>
+                <button type="submit" class="btn-primary">Register</button>
             </form>
 
             <p class="form-footer-link">
-                Zaten bir hesabiniz var mi? <a href="login.php">Giris Yap</a>
+                Already have an account? <a href="login.php">Log In</a>
             </p>
         </section>
 <?php
@@ -127,7 +127,7 @@ if (file_exists('includes/footer.php')) {
 ?>
     </main>
     <footer class="site-footer">
-        <p>&copy; <?php echo e(date('Y')); ?> PetPal Evcil Hayvan Sahiplendirme Platformu</p>
+        <p>&copy; <?php echo e(date('Y')); ?> PetPal Pet Adoption Platform</p>
     </footer>
 </body>
 </html>

@@ -36,7 +36,7 @@ function is_logged_in(): bool
 function require_login(): void
 {
     if (!is_logged_in()) {
-        set_flash('error', 'Bu sayfaya erismek icin lutfen giris yapin.');
+        set_flash('error', 'Please log in to continue.');
         redirect('login.php');
     }
 }

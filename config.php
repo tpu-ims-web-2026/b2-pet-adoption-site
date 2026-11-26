@@ -34,5 +34,5 @@ try {
     $pdo = new PDO($dsn, $dbUser, $dbPass, $pdoOptions);
 } catch (PDOException $exception) {
     http_response_code(500);
-    exit('Veritabani baglantisi kurulamadi. Lutfen daha sonra tekrar deneyin.');
+    exit('Database connection failed. Please try again later.');
 }
