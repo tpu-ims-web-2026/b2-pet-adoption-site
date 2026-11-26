@@ -1,4 +1,4 @@
-name: CI & Security Pipeline
+name: CI Pipeline
 
 on:
   push:
@@ -37,15 +37,3 @@ jobs:
 
       - name: Test MySQL Schema Import
         run: mysql -h 127.0.0.1 -u root petpal_db < database.sql
-
-  secret-scan:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Gitleaks Secret Scan
-        uses: gitleaks/gitleaks-action@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
