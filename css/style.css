@@ -1,0 +1,661 @@
+/* =====================================================================
+   PetPal - css/style.css                              (Sahibi: Member 1)
+   Ana tasarım: renk değişkenleri, Flexbox düzeni, header/nav, footer,
+   hayvan kartları, detay sayfası ve ekran boyutuna göre ayarlar.
+
+   NOT: Butonlar, form alanları ve durum rozetleri css/forms.css (M2),
+        admin tabloları css/admin.css (M3) içindedir.
+   ===================================================================== */
+
+
+/* =====================================================================
+   1. RENKLER VE AYARLAR  >>> DEĞİŞTİRMEK İÇİN SADECE BURAYI DÜZENLE <<<
+   Sitedeki tüm renkler bu değişkenlerden gelir. Bir değeri burada
+   değiştirdiğinde her yerde değişir. forms.css ve admin.css de
+   aynı değişkenleri kullanabilir: örn. color: var(--color-primary);
+   ===================================================================== */
+:root {
+    /* --- Ana marka renkleri --- */
+    --color-primary:        #e07a5f;   /* ana renk: logo, aktif menü, linkler (şimdilik mercan turuncusu) */
+    --color-primary-dark:   #c25e44;   /* ana rengin koyusu: link üzerine gelince (hover) */
+    --color-primary-light:  #fbe3db;   /* ana rengin açığı: rozet ve vurgu arka planları */
+    --color-secondary:      #3d405b;   /* ikinci renk: header ve footer arka planı (şimdilik lacivert-gri) */
+    --color-accent:         #81b29a;   /* vurgu rengi: "yuva bekliyor" gibi olumlu bilgiler (şimdilik adaçayı yeşili) */
+
+    /* --- Metin renkleri --- */
+    --color-text:           #2b2d42;   /* normal yazı rengi */
+    --color-text-muted:     #6c6f85;   /* soluk yazı: açıklamalar, küçük bilgiler */
+    --color-text-on-dark:   #f4f1de;   /* koyu arka plan üzerindeki yazı (header, footer) */
+
+    /* --- Arka plan ve çizgi renkleri --- */
+    --color-bg:             #faf8f3;   /* sayfanın genel arka planı (krem) */
+    --color-surface:        #ffffff;   /* kartların ve kutuların arka planı */
+    --color-border:         #e4e0d6;   /* ince çerçeve ve ayırıcı çizgiler */
+
+    /* --- Yazı tipleri (dışarıdan font yüklenmez, sistem fontları kullanılır) --- */
+    --font-body:    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;  /* normal metin */
+    --font-heading: Georgia, "Times New Roman", serif;                        /* başlıklar */
+
+    /* --- Ölçüler --- */
+    --radius:       12px;              /* kartların köşe yuvarlaklığı */
+    --radius-small: 6px;               /* küçük öğelerin köşe yuvarlaklığı */
+    --shadow:       0 2px 8px rgba(0, 0, 0, 0.08);   /* kartların normal gölgesi */
+    --shadow-hover: 0 6px 18px rgba(0, 0, 0, 0.14);  /* kartın üzerine gelince gölge */
+    --container:    1140px;            /* içeriğin en fazla genişliği */
+    --gap:          24px;              /* kartlar ve sütunlar arası boşluk */
+}
+
+
+/* =====================================================================
+   2. TEMEL AYARLAR (tüm sayfalar)
+   ===================================================================== */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;            /* padding ve border genişliğe dahil edilir */
+}
+
+html {
+    font-size: 16px;                   /* 1rem = 16px */
+}
+
+body {
+    margin: 0;                         /* tarayıcının varsayılan boşluğunu kaldır */
+    min-height: 100vh;                 /* sayfa en az ekran yüksekliği kadar olsun */
+    display: flex;                     /* footer'ı her zaman en alta itmek için Flexbox */
+    flex-direction: column;            /* header, main, footer alt alta */
+    font-family: var(--font-body);     /* normal yazı tipi */
+    line-height: 1.6;                  /* okunabilir satır aralığı */
+    color: var(--color-text);          /* yazı rengi */
+    background-color: var(--color-bg); /* sayfa arka planı */
+}
+
+main {
+    flex: 1;                           /* main boş alanı doldurur, footer en alta iner */
+    padding-top: 32px;                 /* header ile içerik arası boşluk */
+    padding-bottom: 48px;              /* içerik ile footer arası boşluk */
+}
+
+h1, h2, h3 {
+    font-family: var(--font-heading);  /* başlık yazı tipi */
+    line-height: 1.25;                 /* başlıklarda daha sıkı satır aralığı */
+    margin-top: 0;                     /* başlığın üstündeki fazla boşluğu kaldır */
+}
+
+a {
+    color: var(--color-primary);       /* link rengi */
+    text-decoration: none;             /* alt çizgiyi kaldır */
+}
+
+a:hover,
+a:focus {
+    color: var(--color-primary-dark);  /* üzerine gelince koyulaşır */
+    text-decoration: underline;        /* ve altı çizilir */
+}
+
+img {
+    max-width: 100%;                   /* resimler kutusundan taşmaz */
+    height: auto;                      /* en-boy oranı korunur */
+    display: block;                    /* resim altındaki boşluğu kaldırır */
+}
+
+:focus-visible {
+    outline: 3px solid var(--color-primary);  /* klavyeyle gezinirken odaklanan öğe belli olsun */
+    outline-offset: 2px;                      /* çerçeve öğeden biraz uzakta */
+}
+
+.container {
+    width: 100%;                       /* dar ekranlarda tam genişlik */
+    max-width: var(--container);       /* geniş ekranlarda en fazla bu kadar */
+    margin-left: auto;                 /* yatayda ortala */
+    margin-right: auto;                /* yatayda ortala */
+    padding-left: 20px;                /* kenarlara yapışmasın */
+    padding-right: 20px;               /* kenarlara yapışmasın */
+}
+
+.page-title {
+    font-size: 2rem;                   /* sayfa başlığı boyutu */
+    margin-bottom: 8px;                /* altındaki açıklamaya yakın */
+}
+
+.page-intro {
+    color: var(--color-text-muted);    /* başlık altındaki açıklama soluk renkte */
+    margin-top: 0;                     /* başlığa yapışık */
+    margin-bottom: 32px;               /* içerikten önce boşluk */
+}
+
+.visually-hidden {                     /* ekranda görünmez ama ekran okuyucu okur (örn. form etiketleri) */
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+}
+
+
+/* =====================================================================
+   3. HEADER VE MENÜ (includes/header.php)
+   ===================================================================== */
+.site-header {
+    background-color: var(--color-secondary); /* koyu header arka planı */
+    color: var(--color-text-on-dark);         /* açık renk yazı */
+    box-shadow: var(--shadow);                /* altına hafif gölge */
+    position: sticky;                         /* sayfa kayarken üstte sabit kalır */
+    top: 0;                                   /* en üste yapışır */
+    z-index: 100;                             /* içeriğin üstünde görünür */
+}
+
+.header-inner {
+    display: flex;                     /* logo, buton ve menü yan yana */
+    align-items: center;               /* dikeyde ortala */
+    justify-content: space-between;    /* logo solda, menü sağda */
+    flex-wrap: wrap;                   /* mobilde menü alt satıra inebilsin */
+    gap: 16px;                         /* öğeler arası boşluk */
+    min-height: 68px;                  /* header yüksekliği */
+}
+
+.logo {
+    display: flex;                     /* logo resmi ve yazı yan yana */
+    align-items: center;               /* dikeyde ortala */
+    gap: 10px;                         /* resim ile yazı arası */
+    color: var(--color-text-on-dark);  /* yazı rengi */
+}
+
+.logo:hover,
+.logo:focus {
+    color: var(--color-text-on-dark);  /* üzerine gelince renk değişmesin */
+    text-decoration: none;             /* alt çizgi olmasın */
+}
+
+.logo-text {
+    font-family: var(--font-heading);  /* site adı başlık fontuyla */
+    font-size: 1.5rem;                 /* büyük yazı */
+    font-weight: bold;                 /* kalın */
+}
+
+.menu-toggle {
+    display: none;                     /* geniş ekranda mobil menü butonu gizli */
+    background: none;                  /* buton arka planı yok */
+    border: 2px solid var(--color-text-on-dark); /* ince çerçeve */
+    border-radius: var(--radius-small);/* köşeler yuvarlak */
+    color: var(--color-text-on-dark);  /* ikon rengi */
+    font-size: 1.4rem;                 /* ☰ ikonunun boyutu */
+    line-height: 1;                    /* buton yüksekliği ikon kadar */
+    padding: 6px 10px;                 /* iç boşluk */
+    cursor: pointer;                   /* el imleci */
+}
+
+.main-nav ul {
+    list-style: none;                  /* madde işaretlerini kaldır */
+    margin: 0;                         /* varsayılan boşlukları kaldır */
+    padding: 0;
+    display: flex;                     /* menü öğeleri yan yana */
+    align-items: center;               /* dikeyde ortala */
+    flex-wrap: wrap;                   /* sığmazsa alt satıra geç */
+    gap: 4px;                          /* öğeler arası boşluk */
+}
+
+.main-nav a {
+    display: inline-flex;              /* yazı ve rozet yan yana */
+    align-items: center;               /* dikeyde ortala */
+    gap: 6px;                          /* yazı ile rozet arası */
+    padding: 8px 12px;                 /* tıklama alanı */
+    border-radius: var(--radius-small);/* köşeler yuvarlak */
+    color: var(--color-text-on-dark);  /* menü yazı rengi */
+}
+
+.main-nav a:hover,
+.main-nav a:focus {
+    background-color: rgba(255, 255, 255, 0.12); /* üzerine gelince hafif açık arka plan */
+    color: var(--color-text-on-dark);            /* yazı rengi aynı kalsın */
+    text-decoration: none;                       /* alt çizgi olmasın */
+}
+
+.main-nav a.active {
+    background-color: var(--color-primary); /* açık olan sayfanın linki ana renkte */
+    color: #ffffff;                          /* beyaz yazı */
+}
+
+.nav-badge {
+    background-color: var(--color-primary-light); /* rozet arka planı */
+    color: var(--color-primary-dark);             /* rozet yazı rengi */
+    font-size: 0.75rem;                           /* küçük yazı */
+    font-weight: bold;                            /* kalın */
+    min-width: 20px;                              /* tek haneli sayıda bile yuvarlak dursun */
+    padding: 1px 6px;                             /* iç boşluk */
+    border-radius: 999px;                         /* hap şeklinde */
+    text-align: center;                           /* sayı ortada */
+}
+
+.nav-user {
+    padding: 8px 12px;                 /* menü linkleriyle aynı hizada */
+    color: var(--color-text-on-dark);  /* "Hi, isim" yazısı */
+    opacity: 0.85;                     /* biraz soluk, link olmadığı belli olsun */
+}
+
+.role-badge {
+    margin-left: 6px;                  /* isimden biraz uzakta */
+    padding: 1px 8px;                  /* iç boşluk */
+    border-radius: 999px;              /* hap şeklinde */
+    background-color: var(--color-accent); /* admin etiketi vurgu renginde */
+    color: var(--color-secondary);     /* koyu yazı */
+    font-size: 0.75rem;                /* küçük yazı */
+    font-weight: bold;                 /* kalın */
+    text-transform: uppercase;         /* büyük harf */
+}
+
+.main-nav a.nav-logout {
+    border: 1px solid rgba(255, 255, 255, 0.4); /* çıkış linki çerçeveli, diğerlerinden ayrılsın */
+}
+
+
+/* =====================================================================
+   4. ANA SAYFA (index.php): karşılama alanı ve hızlı arama
+   ===================================================================== */
+.hero {
+    display: flex;                     /* yazı ve görsel yan yana */
+    align-items: center;               /* dikeyde ortala */
+    gap: var(--gap);                   /* aralarında boşluk */
+    padding: 48px 40px;                /* iç boşluk */
+    margin-bottom: 48px;               /* altındaki bölümden uzak */
+    border-radius: var(--radius);      /* köşeler yuvarlak */
+    background-color: var(--color-primary-light); /* açık ana renk arka plan */
+}
+
+.hero-text {
+    flex: 1;                           /* yazı alanı boş yeri doldurur */
+}
+
+.hero-text h1 {
+    font-size: 2.5rem;                 /* büyük karşılama başlığı */
+    margin-bottom: 12px;               /* altındaki paragrafa yakın */
+}
+
+.hero-image {
+    flex: 0 0 320px;                   /* görsel sabit 320px genişlikte */
+}
+
+.hero-image img {
+    border-radius: var(--radius);      /* görselin köşeleri yuvarlak */
+}
+
+.quick-search {
+    display: flex;                     /* arama kutusu ve buton yan yana */
+    gap: 8px;                          /* aralarında boşluk */
+    margin-top: 20px;                  /* üstündeki yazıdan uzak */
+    max-width: 480px;                  /* çok uzamasın */
+}
+
+.quick-search input {
+    flex: 1;                           /* arama kutusu kalan genişliği alır */
+}
+
+.section-header {
+    display: flex;                     /* bölüm başlığı ve "tümünü gör" linki yan yana */
+    align-items: baseline;             /* yazıların alt çizgisi hizalı */
+    justify-content: space-between;    /* başlık solda, link sağda */
+    gap: 16px;                         /* aralarında boşluk */
+    margin-bottom: 20px;               /* kartlardan önce boşluk */
+}
+
+
+/* =====================================================================
+   5. FİLTRE ÇUBUĞU (pets.php)
+   ===================================================================== */
+.filter-bar {
+    display: flex;                     /* filtre alanları yan yana */
+    flex-wrap: wrap;                   /* sığmazsa alt satıra geç */
+    align-items: flex-end;             /* buton ve kutular alttan hizalı */
+    gap: 12px 16px;                    /* satır ve sütun boşluğu */
+    padding: 20px;                     /* iç boşluk */
+    margin-bottom: 32px;               /* kartlardan önce boşluk */
+    background-color: var(--color-surface); /* beyaz kutu */
+    border: 1px solid var(--color-border);  /* ince çerçeve */
+    border-radius: var(--radius);      /* köşeler yuvarlak */
+}
+
+.filter-bar .filter-field {
+    flex: 1 1 160px;                   /* her alan en az 160px, yer varsa büyür */
+    display: flex;                     /* etiket ve kutu alt alta */
+    flex-direction: column;
+    gap: 4px;                          /* etiket ile kutu arası */
+}
+
+.filter-field input,
+.filter-field select {
+    width: 100%;                       /* kutu alanı tam doldur */
+    padding: 8px 10px;                 /* iç boşluk */
+    border: 1px solid var(--color-border);  /* ince çerçeve */
+    border-radius: var(--radius-small);/* köşeler yuvarlak */
+    background-color: var(--color-surface); /* beyaz arka plan */
+    color: var(--color-text);          /* yazı rengi */
+    font: inherit;                     /* sayfanın yazı tipini kullan */
+}
+
+.result-count {
+    color: var(--color-text-muted);    /* "12 pets found" yazısı soluk */
+    margin-bottom: 16px;               /* kartlardan önce boşluk */
+}
+
+.empty-state {                         /* sonuç yoksa gösterilen dostça mesaj */
+    padding: 48px 20px;                /* geniş iç boşluk */
+    text-align: center;                /* ortalı */
+    color: var(--color-text-muted);    /* soluk yazı */
+    background-color: var(--color-surface); /* beyaz kutu */
+    border: 2px dashed var(--color-border); /* kesikli çerçeve */
+    border-radius: var(--radius);      /* köşeler yuvarlak */
+}
+
+
+/* =====================================================================
+   6. HAYVAN KARTLARI (index.php ve pets.php) - Flexbox grid
+   ===================================================================== */
+.pet-grid {
+    display: flex;                     /* kartlar yan yana */
+    flex-wrap: wrap;                   /* sığmayan kart alt satıra iner */
+    gap: var(--gap);                   /* kartlar arası boşluk */
+    list-style: none;                  /* <ul> kullanılırsa madde işareti olmasın */
+    margin: 0;
+    padding: 0;
+}
+
+.pet-card {
+    flex: 0 0 calc((100% - 2 * var(--gap)) / 3); /* geniş ekranda satırda 3 kart */
+    display: flex;                     /* kartın içi alt alta */
+    flex-direction: column;
+    background-color: var(--color-surface); /* beyaz kart */
+    border: 1px solid var(--color-border);  /* ince çerçeve */
+    border-radius: var(--radius);      /* köşeler yuvarlak */
+    box-shadow: var(--shadow);         /* hafif gölge */
+    overflow: hidden;                  /* resim köşelerden taşmasın */
+    transition: transform 0.2s, box-shadow 0.2s; /* üzerine gelince yumuşak geçiş */
+}
+
+.pet-card:hover {
+    transform: translateY(-4px);       /* üzerine gelince hafif yukarı kalkar */
+    box-shadow: var(--shadow-hover);   /* gölge büyür */
+}
+
+.pet-card-img {
+    position: relative;                /* durum rozetini resmin üstüne koymak için */
+    aspect-ratio: 4 / 3;               /* tüm resimler aynı oranda */
+    background-color: var(--color-border); /* resim yüklenmezse gri alan */
+}
+
+.pet-card-img img {
+    width: 100%;                       /* kutuyu tamamen doldur */
+    height: 100%;
+    object-fit: cover;                 /* resmi bozmadan kırp */
+}
+
+.pet-card-img .badge {                 /* durum rozeti (stili forms.css'te), sadece konumu burada */
+    position: absolute;                /* resmin üstünde */
+    top: 12px;                         /* üstten boşluk */
+    left: 12px;                        /* soldan boşluk */
+}
+
+.pet-card-body {
+    flex: 1;                           /* kart gövdesi kalan yüksekliği doldurur */
+    display: flex;                     /* içerik alt alta */
+    flex-direction: column;
+    padding: 16px 18px;                /* iç boşluk */
+}
+
+.pet-card-title {
+    font-size: 1.25rem;                /* hayvanın adı */
+    margin-bottom: 4px;                /* altındaki bilgiye yakın */
+}
+
+.pet-card-meta {
+    color: var(--color-text-muted);    /* "Dog · 2 years · İzmir" bilgisi soluk */
+    font-size: 0.9rem;                 /* biraz küçük */
+    margin: 0 0 12px;                  /* alttan boşluk */
+}
+
+.pet-card-link {
+    margin-top: auto;                  /* link her zaman kartın en altında */
+    font-weight: bold;                 /* kalın */
+}
+
+
+/* =====================================================================
+   7. HAYVAN DETAY SAYFASI (pet.php)
+   ===================================================================== */
+.pet-detail {
+    display: flex;                     /* fotoğraf ve bilgiler yan yana */
+    gap: 40px;                         /* aralarında geniş boşluk */
+    align-items: flex-start;           /* üstten hizalı */
+}
+
+.pet-detail-photo {
+    flex: 0 0 45%;                     /* fotoğraf genişliğin %45'i */
+}
+
+.pet-detail-photo img {
+    width: 100%;                       /* kutuyu doldur */
+    border-radius: var(--radius);      /* köşeler yuvarlak */
+    box-shadow: var(--shadow);         /* hafif gölge */
+}
+
+.pet-detail-info {
+    flex: 1;                           /* bilgiler kalan alanı doldurur */
+}
+
+.pet-facts {
+    display: flex;                     /* bilgi kutucukları yan yana */
+    flex-wrap: wrap;                   /* sığmazsa alt satıra */
+    gap: 12px;                         /* kutucuklar arası */
+    margin: 20px 0;                    /* üstten ve alttan boşluk */
+    padding: 0;
+}
+
+.pet-facts div {
+    flex: 1 1 140px;                   /* her kutucuk en az 140px */
+    padding: 12px 14px;                /* iç boşluk */
+    background-color: var(--color-surface); /* beyaz kutu */
+    border: 1px solid var(--color-border);  /* ince çerçeve */
+    border-radius: var(--radius-small);/* köşeler yuvarlak */
+}
+
+.pet-facts dt {
+    font-size: 0.8rem;                 /* "Age", "Size" gibi etiketler küçük */
+    color: var(--color-text-muted);    /* soluk */
+    text-transform: uppercase;         /* büyük harf */
+}
+
+.pet-facts dd {
+    margin: 0;                         /* tarayıcının varsayılan girintisini kaldır */
+    font-weight: bold;                 /* değer kalın */
+}
+
+.pet-detail-actions {
+    margin-top: 24px;                  /* "Apply to adopt" butonu alanı */
+    padding-top: 20px;                 /* çizgiden sonra boşluk */
+    border-top: 1px solid var(--color-border); /* üstte ayırıcı çizgi */
+}
+
+.pet-detail-info .badge {
+    display: inline-block;             /* durum rozeti isim altında, kendi satırında */
+    margin-bottom: 4px;                /* bilgi kutucuklarından önce küçük boşluk */
+}
+
+.adopted-note {                        /* "Already adopted" yazısı (buton yerine gösterilir) */
+    margin: 0;                         /* fazla boşluk olmasın */
+    font-weight: bold;                 /* kalın */
+    color: var(--color-text-muted);    /* soluk renk: tıklanacak bir şey olmadığı belli olsun */
+}
+
+.not-found {                           /* ?id= bulunamazsa gösterilen 404 mesajı */
+    text-align: center;                /* ortalı */
+    padding: 64px 20px;                /* geniş boşluk */
+}
+
+
+/* =====================================================================
+   8. FOOTER (includes/footer.php)
+   ===================================================================== */
+.site-footer {
+    background-color: var(--color-secondary); /* header ile aynı koyu renk */
+    color: var(--color-text-on-dark);         /* açık renk yazı */
+    padding-top: 40px;                        /* üst iç boşluk */
+}
+
+.footer-inner {
+    display: flex;                     /* üç sütun yan yana */
+    flex-wrap: wrap;                   /* sığmazsa alt satıra */
+    gap: 32px;                         /* sütunlar arası */
+    padding-bottom: 32px;              /* telif satırından önce boşluk */
+}
+
+.footer-col {
+    flex: 1 1 220px;                   /* her sütun en az 220px, eşit büyür */
+}
+
+.footer-title {
+    font-size: 1.1rem;                 /* sütun başlığı boyutu */
+    margin-bottom: 12px;               /* altındaki içerikten uzak */
+}
+
+.footer-col p {
+    margin: 0 0 10px;                  /* paragraflar arası küçük boşluk */
+    opacity: 0.9;                      /* biraz soluk */
+}
+
+.footer-stats strong {
+    color: var(--color-accent);        /* sayılar vurgu renginde */
+    font-size: 1.1rem;                 /* biraz büyük */
+}
+
+.footer-links {
+    list-style: none;                  /* madde işaretlerini kaldır */
+    margin: 0;
+    padding: 0;
+}
+
+.footer-links li {
+    margin-bottom: 6px;                /* linkler arası boşluk */
+}
+
+.site-footer a {
+    color: var(--color-text-on-dark);  /* footer linkleri açık renkte */
+    text-decoration: underline;        /* link olduğu belli olsun */
+    text-decoration-color: rgba(255, 255, 255, 0.4); /* alt çizgi soluk */
+}
+
+.site-footer a:hover,
+.site-footer a:focus {
+    color: var(--color-primary-light); /* üzerine gelince açık ana renk */
+}
+
+.footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.15); /* üstte ince ayırıcı çizgi */
+    padding: 16px 20px;                /* iç boşluk */
+    text-align: center;                /* ortalı */
+    font-size: 0.85rem;                /* küçük yazı */
+}
+
+.footer-bottom p {
+    margin: 0;                         /* fazla boşluk olmasın */
+    opacity: 0.75;                     /* soluk */
+}
+
+
+/* =====================================================================
+   9. EKRAN BOYUTUNA GÖRE AYARLAR (media queries)
+   ===================================================================== */
+
+/* --- Tablet: 900px ve altı --- */
+@media (max-width: 900px) {
+    .pet-card {
+        flex-basis: calc((100% - var(--gap)) / 2); /* satırda 2 kart */
+    }
+
+    .pet-detail {
+        flex-direction: column;        /* fotoğraf üstte, bilgiler altta */
+    }
+
+    .pet-detail-photo {
+        flex-basis: auto;              /* sabit %45 genişliği kaldır */
+        width: 100%;                   /* tam genişlik */
+    }
+
+    .hero-image {
+        flex-basis: 240px;             /* karşılama görseli küçülür */
+    }
+}
+
+/* --- Telefon: 600px ve altı --- */
+@media (max-width: 600px) {
+    :root {
+        --gap: 16px;                   /* telefonda boşluklar daralır */
+    }
+
+    .page-title {
+        font-size: 1.6rem;             /* başlık küçülür */
+    }
+
+    /* Mobil menü: JavaScript çalışıyorsa menü gizlenir, ☰ butonu görünür.
+       header.php <html> etiketine "js" sınıfını ekler; JS kapalıysa
+       bu kurallar çalışmaz ve menü her zaman açık görünür. */
+    .js .menu-toggle {
+        display: block;                /* ☰ butonunu göster */
+    }
+
+    .js .main-nav {
+        display: none;                 /* menüyü gizle */
+    }
+
+    .js .main-nav.is-open {
+        display: block;                /* js/pets.js "is-open" sınıfını ekleyince menü açılır */
+    }
+
+    .main-nav {
+        flex-basis: 100%;              /* menü header'ın tam genişliğinde, alt satırda */
+        padding-bottom: 12px;          /* altında boşluk */
+    }
+
+    .main-nav ul {
+        flex-direction: column;        /* menü öğeleri alt alta */
+        align-items: stretch;          /* her öğe tam genişlik */
+    }
+
+    .main-nav a {
+        display: flex;                 /* tam genişlikte tıklanabilir alan */
+        padding: 12px;                 /* parmakla dokunmaya uygun büyüklük */
+    }
+
+    .hero {
+        flex-direction: column;        /* görsel yazının altına iner */
+        padding: 32px 20px;            /* iç boşluk küçülür */
+        text-align: center;            /* yazılar ortalı */
+    }
+
+    .hero-text h1 {
+        font-size: 1.9rem;             /* karşılama başlığı küçülür */
+    }
+
+    .hero-image {
+        flex-basis: auto;              /* sabit genişliği kaldır */
+        width: 100%;                   /* tam genişlik */
+    }
+
+    .quick-search {
+        flex-direction: column;        /* arama kutusu ve buton alt alta */
+        max-width: none;               /* tam genişlik */
+    }
+
+    .pet-card {
+        flex-basis: 100%;              /* satırda 1 kart */
+    }
+
+    .section-header {
+        flex-direction: column;        /* başlık ve link alt alta */
+        align-items: flex-start;       /* sola hizalı */
+    }
+
+    .footer-inner {
+        flex-direction: column;        /* footer sütunları alt alta */
+        gap: 24px;                     /* sütunlar arası boşluk */
+    }
+}
