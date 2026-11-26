@@ -1,3 +1,5 @@
+SET FOREIGN_KEY_CHECKS = 0;
+
 -- M2: users, adoption_applications
 
 CREATE TABLE IF NOT EXISTS users (
@@ -68,3 +70,5 @@ INSERT INTO contact_messages (user_id, name, email, subject, body, is_read) VALU
 (2, 'Deniz Yilmaz', 'user1@petpal.test', 'Question about adoption process', 'Hello, how long does it usually take for an adoption application to be reviewed after submission?', 0),
 (NULL, 'Liam Brooks', 'liam.brooks@example.test', 'Volunteering at the shelter', 'Hi PetPal team, I would love to help out on weekends. Do you accept new volunteers at the Istanbul shelter?', 0),
 (3, 'Ece Kaya', 'user2@petpal.test', 'Vaccination records', 'Thank you for the quick response earlier. Will we receive the full vaccination booklet when picking up an adopted pet?', 1);
+
+SET FOREIGN_KEY_CHECKS = 1;
