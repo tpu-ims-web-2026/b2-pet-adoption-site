@@ -42,6 +42,29 @@ CREATE TABLE IF NOT EXISTS adoption_applications (
 
 -- Test kullanicilari (Tum test hesaplari icin sifre: Test1234!)
 INSERT INTO users (full_name, email, password_hash, phone, city, role, is_active) VALUES
-('PetPal Yonetici', 'admin@petpal.test', '$2y$12$hj4BlDcKBjg.hdWKPBuzOu1W6Ky8y0Lqx/ps6T59w9q5yB/kNa3jS', '+90 555 000 0001', 'Istanbul', 'admin', 1),
+('PetPal Admin', 'admin@petpal.test', '$2y$12$hj4BlDcKBjg.hdWKPBuzOu1W6Ky8y0Lqx/ps6T59w9q5yB/kNa3jS', '+90 555 000 0001', 'Istanbul', 'admin', 1),
 ('Deniz Yilmaz', 'user1@petpal.test', '$2y$12$3/C7DAmKXROy5RfW0bgY..ZXnHbzIHlpnNofDGvFXcZ3BulmIfH.G', '+90 555 000 0002', 'Ankara', 'user', 1),
 ('Ece Kaya', 'user2@petpal.test', '$2y$12$/MO7uDaGPhu0qgfDoh0vIu4HnI/DDymSux7yGNAzAmESZL7t/ifK.', '+90 555 000 0003', 'Izmir', 'user', 1);
+
+-- M3: contact_messages
+
+CREATE TABLE IF NOT EXISTS contact_messages (
+    message_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    user_id INT UNSIGNED NULL,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(150) NOT NULL,
+    subject VARCHAR(120) NOT NULL,
+    body TEXT NOT NULL,
+    is_read TINYINT(1) NOT NULL DEFAULT 0,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (message_id),
+    CONSTRAINT fk_contact_messages_user
+        FOREIGN KEY (user_id) REFERENCES users (user_id)
+        ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Sample contact messages
+INSERT INTO contact_messages (user_id, name, email, subject, body, is_read) VALUES
+(2, 'Deniz Yilmaz', 'user1@petpal.test', 'Question about adoption process', 'Hello, how long does it usually take for an adoption application to be reviewed after submission?', 0),
+(NULL, 'Liam Brooks', 'liam.brooks@example.test', 'Volunteering at the shelter', 'Hi PetPal team, I would love to help out on weekends. Do you accept new volunteers at the Istanbul shelter?', 0),
+(3, 'Ece Kaya', 'user2@petpal.test', 'Vaccination records', 'Thank you for the quick response earlier. Will we receive the full vaccination booklet when picking up an adopted pet?', 1);
