@@ -2,35 +2,53 @@
 require_once 'config.php';
 require_once 'includes/auth.php';
 
-$pageTitle = 'Log In - PetPal';
-$flash = get_flash();
-$hasSharedHeader = file_exists('includes/header.php');
+$rawNext = $_POST['next'] ?? $_GET['next'] ?? null;
+$next = sanitize_next_url(is_scalar($rawNext) ? (string) $rawNext : null);
 
-if ($hasSharedHeader) {
-    include 'includes/header.php';
-} else {
-?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo e($pageTitle); ?></title>
-    <link rel="stylesheet" href="css/forms.css">
-</head>
-<body>
-    <header class="site-header">
-        <nav class="site-nav" aria-label="Main Navigation">
-            <a class="site-brand" href="index.php">PetPal</a>
-            <ul class="nav-links">
-                <li><a href="login.php">Log In</a></li>
-                <li><a href="register.php">Register</a></li>
-            </ul>
-        </nav>
-    </header>
-    <main class="site-main">
-<?php
+if (is_logged_in()) {
+    redirect($next ?? 'index.php');
 }
+
+$error = '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $email = trim((string) ($_POST['email'] ?? ''));
+    $password = (string) ($_POST['password'] ?? '');
+
+    if ($email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL) || $password === '') {
+        $error = 'Please enter a valid email address and password.';
+    } else {
+        $stmt = $pdo->prepare(
+            'SELECT user_id, full_name, email, password_hash, role, is_active
+             FROM users
+             WHERE email = :email
+             LIMIT 1'
+        );
+        $stmt->execute([':email' => $email]);
+        $user = $stmt->fetch();
+
+        if (!$user || !password_verify($password, (string) $user['password_hash'])) {
+            $error = 'Invalid email address or password.';
+        } elseif (empty($user['is_active'])) {
+            $error = 'Your account is currently inactive. Please contact support.';
+        } else {
+            session_regenerate_id(true);
+            $_SESSION['user'] = [
+                'user_id' => (int) $user['user_id'],
+                'role' => (string) $user['role'],
+                'full_name' => (string) $user['full_name'],
+            ];
+
+            set_flash('success', 'Welcome back, ' . $user['full_name'] . '!');
+            redirect($next ?? 'index.php');
+        }
+    }
+}
+
+$pageTitle = 'Login';
+$flash = get_flash();
+
+require_once 'includes/header.php';
 ?>
         <section class="form-card" aria-labelledby="login-heading">
             <h1 id="login-heading">Log In</h1>
@@ -42,7 +60,17 @@ if ($hasSharedHeader) {
                 </div>
             <?php } ?>
 
+            <?php if ($error !== '') { ?>
+                <div class="alert-error" role="alert">
+                    <?php echo e($error); ?>
+                </div>
+            <?php } ?>
+
             <form class="auth-form" action="login.php" method="POST">
+                <?php if ($next !== null) { ?>
+                    <input type="hidden" name="next" value="<?php echo e($next); ?>">
+                <?php } ?>
+
                 <div class="form-group">
                     <label for="email">Email Address</label>
                     <input
@@ -65,7 +93,7 @@ if ($hasSharedHeader) {
                     >
                 </div>
 
-                <button type="submit" class="btn-primary">Log In</button>
+                <button type="submit" class="btn btn-primary">Log In</button>
             </form>
 
             <p class="form-footer-link">
@@ -73,16 +101,5 @@ if ($hasSharedHeader) {
             </p>
         </section>
 <?php
-if (file_exists('includes/footer.php')) {
-    include 'includes/footer.php';
-} else {
-?>
-    </main>
-    <footer class="site-footer">
-        <p>&copy; <?php echo e(date('Y')); ?> PetPal Pet Adoption Platform</p>
-    </footer>
-</body>
-</html>
-<?php
-}
+require_once 'includes/footer.php';
 ?>
